@@ -103,6 +103,12 @@
     <Compile Include="Source\Characters\AI\SteeringPath.cs" />
     <Compile Include="Source\Characters\Jobs\Skill.cs" />
     <Compile Include="Source\Characters\Jobs\SkillPrefab.cs" />
+    <Compile Include="Source\Cold Seas\Cold Seas - Connections.cs" />
+    <Compile Include="Source\Cold Seas\Cold Seas - Edges.cs" />
+    <Compile Include="Source\Cold Seas\Cold Seas - Map.cs" />
+    <Compile Include="Source\Cold Seas\Cold Seas - Nodes.cs" />
+    <Compile Include="Source\Cold Seas\Cold Seas - Vector2.cs" />
+    <Compile Include="Source\Cold Seas\Cold Seas - VoronoiCell.cs" />
     <Compile Include="Source\ContentPackage.cs" />
     <Compile Include="Source\CoroutineManager.cs" />
     <Compile Include="Source\Events\Missions\CargoMission.cs" />

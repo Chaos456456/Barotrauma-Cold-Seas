@@ -72,7 +72,7 @@ namespace Voronoi2
 	/// <summary>
 	/// Description of Voronoi.
 	/// </summary>
-	public class Voronoi
+	class Voronoi
 	{
 		// ************* Private members ******************
 		double borderMinX, borderMaxX, borderMinY, borderMaxY;

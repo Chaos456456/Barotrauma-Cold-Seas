@@ -122,7 +122,7 @@ namespace Voronoi2
         Solid, Empty, Edge, Path, Removed
     }
 
-    public class VoronoiCell
+    partial class VoronoiCell
     {
         public List<GraphEdge> edges;
         public Site site;
@@ -189,7 +189,7 @@ namespace Voronoi2
         }
     }
 	
-	public class GraphEdge
+	partial class GraphEdge
 	{
         public Vector2 point1, point2;
 		public Site site1, site2;

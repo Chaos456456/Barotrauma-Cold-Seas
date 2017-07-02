@@ -8,7 +8,7 @@ using Voronoi2;
 
 namespace Barotrauma
 {
-    class Map
+    partial class Map
     {
         Vector2 difficultyIncrease = new Vector2(5.0f,10.0f);
         Vector2 difficultyCutoff = new Vector2(80.0f, 100.0f);
@@ -105,11 +105,12 @@ namespace Barotrauma
             
             Rand.SetSyncedSeed(ToolBox.StringToInt(this.seed));
 
-            GenerateLocations();
+            GenerateMap(CONNECTION.VORONOI);
+            //GenerateLocations();
 
-            currentLocation = locations[locations.Count / 2];
+            /*currentLocation = locations[locations.Count / 2];
             currentLocation.Discovered = true;
-            GenerateDifficulties(currentLocation, new List<LocationConnection> (connections), 10.0f);
+            GenerateDifficulties(currentLocation, new List<LocationConnection> (connections), 10.0f);*/
 
             foreach (LocationConnection connection in connections)
             {
@@ -298,8 +299,48 @@ namespace Barotrauma
             Vector2 rectCenter = new Vector2(rect.Center.X, rect.Center.Y);
             Vector2 offset = -currentLocation.MapPosition;
 
+            List<Color> colors = new List<Color>{ Color.Red, Color.Green, Color.Blue, Color.Pink, Color.Orange, Color.Yellow, Color.Cyan, Color.Magenta, Color.Black, Color.White };
+
             iceTexture.DrawTiled(spriteBatch, new Vector2(rect.X, rect.Y), new Vector2(rect.Width, rect.Height), Vector2.Zero, Color.White*0.8f);
             
+            foreach (GraphEdge edge in graphEdges)
+            {
+                if (edge.node1 != null && edge.node2 != null)
+                {
+                    Color color;
+
+                    float dist = Vector2.Distance(edge.node1.mapPosition, edge.node2.mapPosition);
+
+                    int width = (int)(MathHelper.Clamp(connections[0].Difficulty, 2.0f, 20.0f) * scale);
+
+                    if (edge.isInternal)
+                        color = Color.Red;
+                    else
+                        color = Color.Blue;
+                    
+                    spriteBatch.Draw(iceCrack,
+                        new Rectangle((int)edge.node1.mapPosition.X, (int)edge.node1.mapPosition.Y, (int)dist + 2, width),
+                        new Rectangle(0, 0, iceCrack.Width, 60), color, MathUtils.VectorToAngle(edge.node2.mapPosition - edge.node1.mapPosition),
+                        new Vector2(0, 30), SpriteEffects.None, 0.01f);
+                }
+            }
+
+            foreach (VoronoiCell cell in graphCells)
+            {
+                float dist = Vector2.Distance(cell.Center, cell.Center);
+
+                int width = (int)(MathHelper.Clamp(connections[0].Difficulty, 2.0f, 20.0f) * 20.0f);
+                
+                if (cell.group != -1)
+                spriteBatch.Draw(iceCrack,
+                    new Rectangle((int)cell.Center.X, (int)cell.Center.Y, (int)dist + 2, width),
+                    new Rectangle(0, 0, iceCrack.Width, 60), colors[cell.group %( colors.Count - 1)], MathUtils.VectorToAngle(cell.Center - cell.Center),
+                    new Vector2(0, 30), SpriteEffects.None, 0.01f);
+            }
+
+
+
+
             foreach (LocationConnection connection in connections)
             {
                 Color crackColor = Color.White * Math.Max(connection.Difficulty/100.0f, 1.5f);
@@ -326,11 +367,11 @@ namespace Barotrauma
                     Vector2 start   = rectCenter + (segment[0] + offset) * scale;
                     Vector2 end     = rectCenter + (segment[1] + offset) * scale;
 
-                    if (!rect.Contains(start) && !rect.Contains(end))
+                    /*if (!rect.Contains(start) && !rect.Contains(end))
                     {
                         continue;
                     }
-                    else
+                    else*/
                     {
                         Vector2? intersection = MathUtils.GetLineRectangleIntersection(start, end, new Rectangle(rect.X, rect.Y + rect.Height, rect.Width, rect.Height));
                         if (intersection != null)
@@ -449,7 +490,7 @@ namespace Barotrauma
     }
 
 
-    class LocationConnection
+    partial class LocationConnection
     {
         private Location[] locations;
         private Level level;
